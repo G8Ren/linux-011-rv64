@@ -1,8 +1,13 @@
 #![no_std]
 #![no_main]
 
+#[macro_use]
+mod uart;
+
 use core::arch::global_asm;
 use core::panic::PanicInfo;
+
+
 
 // 1. 内核第一条指令的汇编入口
 // OpenSBI 会跳转到这里，我们需要先设置栈指针 (sp)，否则 Rust 函数无法调用喵
@@ -20,13 +25,15 @@ global_asm!(
     "boot_stack_top:"                // 栈顶标签（栈在 RISC-V 中向下增长）
 );
 
-// 2. Rust 侧的内核主函数
-// 适配新版 Rust：显式声明干涉链接器符号表是 unsafe 的操作喵
 #[unsafe(no_mangle)]
 pub extern "C" fn rust_main() -> ! {
     clear_bss();
     
-    // TODO: 在这里我们将实现串口 (UART) 驱动，用于打印字符
+    // --- 新增：内核的第一声啼哭喵！ ---
+    println!("===============================");
+    println!(" Nyako OS (Linux 0.11 on RISC-V) ");
+    println!(" Kernel initialized successfully!");
+    println!("===============================");
     
     loop {}
 }
